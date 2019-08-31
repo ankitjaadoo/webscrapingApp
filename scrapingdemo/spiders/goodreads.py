@@ -3,7 +3,9 @@ import scrapy
 
 
 class GoodreadsSpider(scrapy.Spider):
+    #identity
     name = 'goodreads'
+    #requests
     allowed_domains = ['goodreads.com']
     def start_requests(self):
         start_urls = [
@@ -15,7 +17,7 @@ class GoodreadsSpider(scrapy.Spider):
     ]
         for url in start_urls:
             yield scrapy.Request(url=url, callback=self.parse)
-
+    #response
     def parse(self, response):
         page_number = response.url.split("=")[1]
         _file = f'{page_number}.html'
