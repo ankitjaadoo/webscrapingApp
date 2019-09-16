@@ -1,31 +1,32 @@
-# -*- coding: utf-8 -*-
 import scrapy
+from scrapy.loader import ItemLoader
+from scrapingdemo.items import QuoteItem
 
-class GoodreadsSpider(scrapy.Spider):
+
+class GoodReadsSpider(scrapy.Spider):
     #identity
-    name = 'goodreads'
-    #requests
-    allowed_domains = ['goodreads.com']
-    def start_requests(self):
+    name="goodreads"
+    #def start_requests(self):
+        #url = 'https://www.goodreads.com/quotes?page=1'
+        #yield scrapy.Request(url=url, callback=self.parse)            
 
-        url = 'https://goodreads.com/quotes?page=1'
-        yield scrapy.Request(url=url, callback=self.parse)
+    start_urls= [
+        'https://www.goodreads.com/quotes?page=1'
+    ]
 
-    #response
+    #Response
     def parse(self, response):
-        for quote in response.selector.xpath("//div[@class='quote']"):
-            yield{
-                'text': quote.xpath(".//div[@class='quoteText']/text()[1]").extract_first(),
-                'author': quote.xpath(".//div[@class='quoteText']/child::span/text()").extract_first(),
-                'tags': quote.xpath(".//div[@class='greyText smallText left']/a/text()").extract(),    
-            }
-        next_page = response.selector.xpath("a[@class='next_page]/@href").extract_first()
-        if next_page is not None:
-            next_page_link = response.urljoin(next_page)
-            yield scrapy.Request(url=next_page_link, callback=self.parse)        
-
-
-
-
-
+        for quote in response.xpath("//div[@class='quote']"):
+            loader= ItemLoader(item=QuoteItem(), selector=quote, response=response)
+            loader.add_xpath('text', ".//div[@class='quoteText']/text()[1]")
+            loader.add_xpath('author', ".//div[@class='quoteText']/child::span")
+            loader.add_xpath('tags', ".//div[@class='greyText smallText left']/a")
+            yield loader.load_item()
+            
         
+        # /quotes?page=2
+        next_page= response.xpath("//a[@class='next_page']/@href").extract_first()
+
+        if next_page is not None:
+            next_page_link= response.urljoin(next_page)
+            yield scrapy.Request(url=next_page_link, callback=self.parse)

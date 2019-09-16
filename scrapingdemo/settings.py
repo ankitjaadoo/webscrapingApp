@@ -1,6 +1,7 @@
+  
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for scrapingdemo project
+# Scrapy settings for demo_project project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -12,14 +13,15 @@
 BOT_NAME = 'scrapingdemo'
 
 SPIDER_MODULES = ['scrapingdemo.spiders']
+
 NEWSPIDER_MODULE = 'scrapingdemo.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrapingdemo (+http://www.yourdomain.com)'
+#USER_AGENT = 'demo_project (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -47,13 +49,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'scrapingdemo.middlewares.ScrapingdemoSpiderMiddleware': 543,
+#    'demo_project.middlewares.DemoProjectSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'scrapingdemo.middlewares.ScrapingdemoDownloaderMiddleware': 543,
+#    'demo_project.middlewares.DemoProjectDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -64,9 +66,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'scrapingdemo.pipelines.ScrapingdemoPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'scrapingdemo.pipelines.MongoDbPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +90,6 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+MONGO_URI= 'mongodb://localhost:27017'
+MONGO_DB= 'goodreads'
